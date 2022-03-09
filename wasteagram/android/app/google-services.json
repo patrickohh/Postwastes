@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:705063319812:android:c7c10afcb44b83c455b851",
         "android_client_info": {
-          "package_name": "edu.oregonstate.ohp"
+          "package_name": "edu.oregonstate.ohp.wasteagram"
         }
       },
       "oauth_client": [
