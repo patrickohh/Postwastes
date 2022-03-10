@@ -30,7 +30,7 @@ class _PostsListState extends State<PostsList> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.7,
                   child: ListView.builder(
                     itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index){
@@ -48,7 +48,10 @@ class _PostsListState extends State<PostsList> {
                     }
                   ),
                 ),
-                choosePhotoButton(context)
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: choosePhotoButton(context),
+                )
               ]           
             );
           }

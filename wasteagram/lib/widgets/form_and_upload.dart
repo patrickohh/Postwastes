@@ -38,36 +38,66 @@ class _UploadAndFormState extends State<UploadAndForm> {
           children: [
              Form(
                 key: formKey,
-                child: quantityField(context, quantity)
+                child: Container(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Quantity of Items'
+                                    ),
+                                    onSaved: (value){
+                                      quantity = int.parse(value!);
+                                    },
+                                    validator: (value){
+                                      if(value == null || value.isEmpty){
+                                        return 'Enter a number';
+                                      }
+                                      return null;
+                                    }
+                                  ),
+                          )
               ),
-              uploadButton(context, formKey, date, location, widget.url, quantity)
+              FloatingActionButton(
+          child: const Icon(Icons.cloud_upload),
+          backgroundColor: Colors.blue,
+          onPressed: () {
+            if(formKey.currentState!.validate()){
+              formKey.currentState?.save();
+              date = DateFormat.yMMMMEEEEd().format(DateTime.now());
+            }
+            Posts newPost = Posts(date: date, 
+                                  longitude: location!.longitude, 
+                                  latitude: location!.latitude, 
+                                  imageURL: widget.url,
+                                  quantity: quantity);
+            newPost.addPost();
+            pushPostsListScreen(context);
+          },
+  
+  )
           ]
       );
   }
 }
 
 Widget uploadButton(BuildContext context, formKey, String? date, Position? location, String? url, int quantity){
-  return Semantics(
-            button: true,
-            enabled: true,
-            onTapHint: 'Tap to Upload post to database',
-            child: FloatingActionButton(
-                  child: const Icon(Icons.cloud_upload),
-                  backgroundColor: Colors.blue,
-                  onPressed: () {
-                    if(formKey.currentState!.validate()){
-                      formKey.currentState?.save();
-                      date = DateFormat.yMMMMEEEEd().format(DateTime.now());
-                    }
-                    Posts newPost = Posts(date: date, 
-                                          longitude: location!.longitude, 
-                                          latitude: location.latitude, 
-                                          imageURL: url,
-                                          quantity: quantity);
-                    newPost.addPost();
-                    pushPostsListScreen(context);
-                  },
-        ),
+  return FloatingActionButton(
+          child: const Icon(Icons.cloud_upload),
+          backgroundColor: Colors.blue,
+          onPressed: () {
+            if(formKey.currentState!.validate()){
+              formKey.currentState?.save();
+              date = DateFormat.yMMMMEEEEd().format(DateTime.now());
+            }
+            Posts newPost = Posts(date: date, 
+                                  longitude: location!.longitude, 
+                                  latitude: location.latitude, 
+                                  imageURL: url,
+                                  quantity: quantity);
+            newPost.addPost();
+            pushPostsListScreen(context);
+          },
+  
   );
 }
 
