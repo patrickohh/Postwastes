@@ -61,23 +61,28 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              onPressed: (){
-                getAndUploadImage(true);
-              }, 
-              child: const Text('Photo Gallery')
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Choose Photos'),
+          centerTitle: true,),
+        body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: (){
+                    getAndUploadImage(true);
+                  }, 
+                  child: const Text('Photo Gallery')
+                ),
+                ElevatedButton(
+                  onPressed: (){
+                    getAndUploadImage(false);
+                  }, 
+                  child: const Text('Camera')
+                )
+              ],
             ),
-            ElevatedButton(
-              onPressed: (){
-                getAndUploadImage(false);
-              }, 
-              child: const Text('Camera')
-            )
-          ],
         ),
     );
   }

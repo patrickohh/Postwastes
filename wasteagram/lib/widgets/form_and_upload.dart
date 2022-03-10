@@ -33,50 +33,46 @@ class _UploadAndFormState extends State<UploadAndForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Add Post')),
-      body: Center(
-        child: Column(
+    return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Form(
-              child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Quantity of Items'
-                      ),
-                      onSaved: (value){
-                        quantity = value as int;
-                      },
-                      validator: (value){
-                        if(value == null || value.isEmpty){
-                          return 'Enter a number';
-                        }
-                        return null;
-                      },
-                  ),
-            ),
-            FloatingActionButton.large(
-              child: const Icon(Icons.cloud_upload),
-              backgroundColor: Colors.blue,
-              onPressed: () {
-                if(_formKey.currentState!.validate()){
-                  _formKey.currentState?.save();
-                  date = DateFormat.yMMMMEEEEd().format(DateTime.now());
-                }
-                FirebaseFirestore.instance.collection('posts').add({
-                  'latitude': location!.latitude,
-                  'longitude': location!.longitude,
-                  'imageURL': widget.url,
-                  'date': date
-                });
-                pushPostsListScreen(context);
-              },
-            )
-          ]
-        ),
-      ),
-    );
+             Form(
+                key: _formKey,
+                child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Quantity of Items'
+                        ),
+                        onSaved: (value){
+                          quantity = int.parse(value!);
+                        },
+                        validator: (value){
+                          if(value == null || value.isEmpty){
+                            return 'Enter a number';
+                          }
+                          return null;
+                        },
+                    ),
+              ),
+              FloatingActionButton(
+                child: const Icon(Icons.cloud_upload),
+                backgroundColor: Colors.blue,
+                onPressed: () {
+                  if(_formKey.currentState!.validate()){
+                    _formKey.currentState?.save();
+                    date = DateFormat.yMMMMEEEEd().format(DateTime.now());
+                  }
+                  FirebaseFirestore.instance.collection('posts').add({
+                    'latitude': location!.latitude,
+                    'longitude': location!.longitude,
+                    'imageURL': widget.url,
+                    'date': date,
+                    'quantity': quantity
+                  });
+                  pushPostsListScreen(context);
+                },
+              )
+            ]
+      );
   }
 }
