@@ -65,17 +65,27 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
-                      onPressed: (){
-                        getAndUploadImage(true);
-                      }, 
-                      child: const Text('Photo Gallery')
+                    Semantics(
+                      button: true,
+                      enabled: true,
+                      onTapHint: 'Tap to Select Photo from Gallery',
+                      child: ElevatedButton(
+                        onPressed: (){
+                          getAndUploadImage(true);
+                        }, 
+                        child: const Text('Photo Gallery')
+                      ),
                     ),
-                    ElevatedButton(
-                      onPressed: (){
-                        getAndUploadImage(false);
-                      }, 
-                      child: const Text('Camera')
+                    Semantics(
+                      button: true,
+                      enabled: true,
+                      onTapHint: 'Tap to Take Photo With Camera',
+                      child: ElevatedButton(
+                        onPressed: (){
+                          getAndUploadImage(false);
+                        }, 
+                        child: const Text('Camera')
+                      ),
                     )
                   ],
                 ),
@@ -83,5 +93,7 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
       );
   }
 }
+
+
 
 
