@@ -25,6 +25,7 @@ class _UploadButtonState extends State<UploadButton> {
   }
 
   void retrieveLocation() async{
+    await Geolocator.requestPermission();
     location = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {});
   }

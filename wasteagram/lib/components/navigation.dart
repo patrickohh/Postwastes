@@ -14,7 +14,7 @@ void pushChoosePhotoScreen(BuildContext context){
   Navigator.push(context, MaterialPageRoute(builder: ((context) => ChoosePhoto())));
 }
 
-void pushAddPostScreen(BuildContext context, String url){
+void pushAddPostScreen(BuildContext context, String? url){
   Navigator.push(context, MaterialPageRoute(builder: ((context) => AddPost(url: url))));
 }
 
