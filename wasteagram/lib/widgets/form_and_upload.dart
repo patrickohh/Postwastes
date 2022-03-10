@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:wasteagram/components/navigation.dart';
+import 'package:wasteagram/models/post_class.dart';
 
 
 class UploadAndForm extends StatefulWidget {
@@ -62,13 +63,12 @@ class _UploadAndFormState extends State<UploadAndForm> {
                     _formKey.currentState?.save();
                     date = DateFormat.yMMMMEEEEd().format(DateTime.now());
                   }
-                  FirebaseFirestore.instance.collection('posts').add({
-                    'latitude': location!.latitude,
-                    'longitude': location!.longitude,
-                    'imageURL': widget.url,
-                    'date': date,
-                    'quantity': quantity
-                  });
+                  Posts newPost = Posts(date: date, 
+                                        longitude: location!.longitude, 
+                                        latitude: location!.latitude, 
+                                        imageURL: widget.url,
+                                        quantity: quantity);
+                  newPost.addPost();
                   pushPostsListScreen(context);
                 },
               )
