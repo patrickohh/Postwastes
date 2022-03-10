@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:wasteagram/app.dart';
 import 'package:wasteagram/widgets/photo_container.dart';
 import 'package:wasteagram/widgets/form_and_upload.dart';
 

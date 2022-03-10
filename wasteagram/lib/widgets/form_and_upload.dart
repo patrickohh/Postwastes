@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:wasteagram/components/navigation.dart';
 import 'package:wasteagram/models/post_class.dart';
@@ -16,7 +15,7 @@ class UploadAndForm extends StatefulWidget {
 
 class _UploadAndFormState extends State<UploadAndForm> {
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   int quantity = 0;
   Position? location;
   String? date;
@@ -38,8 +37,37 @@ class _UploadAndFormState extends State<UploadAndForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
              Form(
-                key: _formKey,
-                child: TextFormField(
+                key: formKey,
+                child: quantityField(context, quantity)
+              ),
+              uploadButton(context, formKey, date, location, widget.url, quantity)
+          ]
+      );
+  }
+}
+
+Widget uploadButton(BuildContext context, formKey, String? date, Position? location, String? url, int quantity){
+  return FloatingActionButton(
+                child: const Icon(Icons.cloud_upload),
+                backgroundColor: Colors.blue,
+                onPressed: () {
+                  if(formKey.currentState!.validate()){
+                    formKey.currentState?.save();
+                    date = DateFormat.yMMMMEEEEd().format(DateTime.now());
+                  }
+                  Posts newPost = Posts(date: date, 
+                                        longitude: location!.longitude, 
+                                        latitude: location.latitude, 
+                                        imageURL: url,
+                                        quantity: quantity);
+                  newPost.addPost();
+                  pushPostsListScreen(context);
+                },
+      );
+}
+
+Widget quantityField(BuildContext context, int quantity){
+  return TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           labelText: 'Quantity of Items'
@@ -52,27 +80,6 @@ class _UploadAndFormState extends State<UploadAndForm> {
                             return 'Enter a number';
                           }
                           return null;
-                        },
-                    ),
-              ),
-              FloatingActionButton(
-                child: const Icon(Icons.cloud_upload),
-                backgroundColor: Colors.blue,
-                onPressed: () {
-                  if(_formKey.currentState!.validate()){
-                    _formKey.currentState?.save();
-                    date = DateFormat.yMMMMEEEEd().format(DateTime.now());
-                  }
-                  Posts newPost = Posts(date: date, 
-                                        longitude: location!.longitude, 
-                                        latitude: location!.latitude, 
-                                        imageURL: widget.url,
-                                        quantity: quantity);
-                  newPost.addPost();
-                  pushPostsListScreen(context);
-                },
-              )
-            ]
-      );
-  }
+                        }
+  );
 }

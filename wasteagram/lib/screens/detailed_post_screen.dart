@@ -25,7 +25,6 @@ class DetailedPost extends StatelessWidget {
               children: [
                 Text(post!['date'].toString()),
                 photoBoxDetailScreen(context, url),
-                Text(post['imageURL'].toString()),
                 Text('Items: ' + post['quantity'].toString()),
                 Text('Location: ' + post['longitude'].toString() + ', ' + post['latitude'].toString())
               ],
