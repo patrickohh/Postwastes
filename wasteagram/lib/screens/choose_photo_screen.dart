@@ -66,25 +66,31 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Semantics(
-                      button: true,
                       enabled: true,
                       onTapHint: 'Tap to Select Photo from Gallery',
-                      child: ElevatedButton(
-                        onPressed: (){
-                          getAndUploadImage(true);
-                        }, 
-                        child: const Text('Photo Gallery')
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        child: ElevatedButton(
+                          onPressed: (){
+                            getAndUploadImage(true);
+                          }, 
+                          child: const Text('Photo Gallery')
+                        ),
                       ),
                     ),
                     Semantics(
-                      button: true,
                       enabled: true,
                       onTapHint: 'Tap to Take Photo With Camera',
-                      child: ElevatedButton(
-                        onPressed: (){
-                          getAndUploadImage(false);
-                        }, 
-                        child: const Text('Camera')
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        child: ElevatedButton(
+                          onPressed: (){
+                            getAndUploadImage(false);
+                          }, 
+                          child: const Text('Camera')
+                        ),
                       ),
                     )
                   ],
@@ -93,6 +99,8 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
       );
   }
 }
+
+
 
 
 

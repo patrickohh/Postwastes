@@ -6,8 +6,9 @@ class Posts{
   double? latitude;
   double? longitude;
   int? quantity;
+  Timestamp? id;
 
-  Posts({this.date, this.imageURL, this.latitude, this.longitude, this.quantity});
+  Posts({this.date, this.imageURL, this.latitude, this.longitude, this.quantity, this.id});
 
   void addPost(){
     FirebaseFirestore.instance.collection('posts').add({
@@ -15,7 +16,8 @@ class Posts{
       'longitude': longitude,
       'imageURL': imageURL,
       'date': date,
-      'quantity': quantity
+      'quantity': quantity,
+      'id': id
     });
   }
 }
