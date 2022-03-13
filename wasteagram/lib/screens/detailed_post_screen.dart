@@ -23,11 +23,10 @@ class DetailedPost extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(post!['date'].toString()),
+                Text(post!['date'].toString(), style: Theme.of(context).textTheme.headline5),
                 photoBoxDetailScreen(context, url),
-                Text(post['imageURL'].toString()),
-                Text('Items: ' + post['quantity'].toString()),
-                Text('Location: ' + post['longitude'].toString() + ', ' + post['latitude'].toString())
+                Text('Items: ' + post['quantity'].toString(), style: Theme.of(context).textTheme.headline6),
+                Text('Location: (' + post['longitude'].toString() + ', ' + post['latitude'].toString() + ')')
               ],
             );
           }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:wasteagram/screens/add_post_screen.dart';
+import 'package:wasteagram/components/navigation.dart';
+
 
 class ChoosePhoto extends StatefulWidget {
   const ChoosePhoto({ Key? key }) : super(key: key);
@@ -13,62 +14,109 @@ class ChoosePhoto extends StatefulWidget {
 
 class _ChoosePhotoState extends State<ChoosePhoto> {
 
-  File? image;
-
-  String? url;
-
   final picker = ImagePicker();
 
   final date = DateTime.now();
 
+  File? image;
+
+  String? url;
+
+  bool showProgress = false;
+
   Future getAndUploadImage(bool isGallery) async{
     if(isGallery){
+      final date = DateTime.now();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       image = File(pickedFile!.path);
-      Reference storageReference = FirebaseStorage.instance.ref().child(date.toString());
-      UploadTask uploadTask = storageReference.putFile(image!); 
-      await uploadTask.whenComplete(() async {
-        url = await storageReference.getDownloadURL();
-        setState(() {});
+
+      var fileName = date.toString() + '.jpg';
+      Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = storageReference.putFile(image!);
+      setState(() {
+        showProgress = true;
+      });
+      await uploadTask;
+      final retrievedImageURL = await storageReference.getDownloadURL();
+      setState(() {
+        showProgress = false;
+        url = retrievedImageURL;
+        pushAddPostScreen(context, url);
       });
     }
     else{
+      final date = DateTime.now();
       final pickedFile = await picker.pickImage(source: ImageSource.camera);
       image = File(pickedFile!.path);
-      Reference storageReference = FirebaseStorage.instance.ref().child(date.toString());
-      UploadTask uploadTask = storageReference.putFile(image!); 
-      await uploadTask.whenComplete(() async{
-        url = await storageReference.getDownloadURL();
-        setState(() {});
+
+      var fileName = date.toString() + '.jpg';
+      Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = storageReference.putFile(image!);
+      setState(() {
+        showProgress = true;
+      });
+      await uploadTask;
+      final retrievedImageURL = await storageReference.getDownloadURL();
+      setState(() {
+        showProgress = false;
+        url = retrievedImageURL;
+        pushAddPostScreen(context, url);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              onPressed: (){
-                getAndUploadImage(true);
-                AddPost(url: url);
-              }, 
-              child: const Text('Photo Gallery')
-            ),
-            ElevatedButton(
-              onPressed: (){
-                getAndUploadImage(false);
-                AddPost(url: url);
-              }, 
-              child: const Text('Camera')
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Choose Photos'),
+          centerTitle: true,),
+        body: showProgress? loadingCircle(context) :
+             Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Semantics(
+                      enabled: true,
+                      onTapHint: 'Tap to Select Photo from Gallery',
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        child: ElevatedButton(
+                          onPressed: (){
+                            getAndUploadImage(true);
+                          }, 
+                          child: const Text('Photo Gallery')
+                        ),
+                      ),
+                    ),
+                    Semantics(
+                      enabled: true,
+                      onTapHint: 'Tap to Take Photo With Camera',
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        child: ElevatedButton(
+                          onPressed: (){
+                            getAndUploadImage(false);
+                          }, 
+                          child: const Text('Camera')
+                        ),
+                      ),
+                    )
+                  ]
+                )
             )
-          ],
-        ),
-    );
+      );
   }
 }
+
+Widget loadingCircle(BuildContext context){
+  return const Center(child: CircularProgressIndicator());
+}
+
+
+
 
 
 
