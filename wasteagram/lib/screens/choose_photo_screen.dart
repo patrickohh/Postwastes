@@ -22,6 +22,8 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
 
   String? url;
 
+  bool showProgress = false;
+
   Future getAndUploadImage(bool isGallery) async{
     if(isGallery){
       final date = DateTime.now();
@@ -31,12 +33,16 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
       var fileName = date.toString() + '.jpg';
       Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
       UploadTask uploadTask = storageReference.putFile(image!);
+      setState(() {
+        showProgress = true;
+      });
       await uploadTask;
       final retrievedImageURL = await storageReference.getDownloadURL();
       setState(() {
+        showProgress = false;
         url = retrievedImageURL;
+        pushAddPostScreen(context, url);
       });
-      pushAddPostScreen(context, url);
     }
     else{
       final date = DateTime.now();
@@ -46,12 +52,16 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
       var fileName = date.toString() + '.jpg';
       Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
       UploadTask uploadTask = storageReference.putFile(image!);
+      setState(() {
+        showProgress = true;
+      });
       await uploadTask;
       final retrievedImageURL = await storageReference.getDownloadURL();
       setState(() {
+        showProgress = false;
         url = retrievedImageURL;
+        pushAddPostScreen(context, url);
       });
-      pushAddPostScreen(context, url);
     }
   }
 
@@ -61,7 +71,8 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
         appBar: AppBar(
           title: const Text('Choose Photos'),
           centerTitle: true,),
-        body: Center(
+        body: showProgress? loadingCircle(context) :
+             Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -93,11 +104,15 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
                         ),
                       ),
                     )
-                  ],
-                ),
-            ),
+                  ]
+                )
+            )
       );
   }
+}
+
+Widget loadingCircle(BuildContext context){
+  return const Center(child: CircularProgressIndicator());
 }
 
 
